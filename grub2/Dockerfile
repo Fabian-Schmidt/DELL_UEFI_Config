@@ -26,6 +26,8 @@ WORKDIR /src/grub-2.04
 # Add `mod-setup_var` command
 COPY . /src/grub-2.04/
 
+RUN patch grub-core/Makefile.core.def < grub-core/Makefile.core.def.patch
+
 RUN ./autogen.sh \
  && ./configure --with-platform=efi --prefix=/build \
  && make \
@@ -38,10 +40,11 @@ RUN ./autogen.sh \
 
 WORKDIR /build
 
-RUN ./bin/grub-mkstandalone -O x86_64-efi -o modGRUBShell.efi
+RUN echo 'configfile ${cmdpath}/grub.cfg' > /tmp/grub.cfg \
+ && ./bin/grub-mkstandalone -O x86_64-efi --modules="part_gpt part_msdos" --locales="en@quot" --themes="" -o bootx64.efi "boot/grub/grub.cfg=/tmp/grub.cfg" -v
 
 FROM scratch as artifact
-COPY --from=build /build/modGRUBShell.efi /modGRUBShell.efi
+COPY --from=build /build/bootx64.efi /bootx64.efi
 
 FROM build as release
 

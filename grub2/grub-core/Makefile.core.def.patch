@@ -1,0 +1,16 @@
+--- C:/Repos/savannah/grub/grub/grub-core/Makefile.core.def	Wed Jan 27 15:28:20 2021
++++ C:/Repos/savannah/grub/grub/grub-core/Makefile.core.new.def	Wed Jan 27 15:33:00 2021
+@@ -804,6 +804,13 @@
+   enable = efi;
+ };
+ 
++
++module = {
++  name = setup_var;
++  common = commands/efi/setup_var.c;
++  enable = efi;
++};
++
+ module = {
+   name = blocklist;
+   common = commands/blocklist.c;
