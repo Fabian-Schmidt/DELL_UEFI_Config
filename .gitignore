@@ -1,0 +1,6 @@
+grub2/artifact/
+
+images/
+tools/
+
+*.exe

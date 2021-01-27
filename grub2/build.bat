@@ -1,0 +1,1 @@
+docker build --target=artifact --output type=local,dest=artifact .
