@@ -5,7 +5,7 @@ param (
     $toolsPath
 )
 
-$ErrorActionPreference = 'Stop';
+$ErrorActionPreference = [System.Management.Automation.ActionPreference]::Stop;
 
 # Need 7Zip to extract rar archive
 Install-Module -Name 7Zip4Powershell -Scope CurrentUser;

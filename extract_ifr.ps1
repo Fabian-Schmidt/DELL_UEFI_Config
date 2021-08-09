@@ -1,4 +1,4 @@
-$ErrorActionPreference = 'Stop';
+$ErrorActionPreference = [System.Management.Automation.ActionPreference]::Stop;
 
 $toolsPath = [IO.Path]::Combine((Resolve-Path '.').Path, 'tools');
 if(-not [IO.Directory]::Exists($toolsPath)) {
@@ -18,6 +18,7 @@ $tools.Values | ForEach-Object {
 
 if($downloadTools) {
     Write-Host 'Download tools';
+    Write-Verbose ". ./download_tools.ps1 -toolsPath $toolsPath";
     . ./download_tools.ps1 -toolsPath $toolsPath;
 } else {
     Write-Host 'Found tools';
@@ -28,6 +29,7 @@ if(-not [IO.Directory]::Exists($imagesPath)) {
     [IO.Directory]::CreateDirectory($imagesPath) | Out-Null;
 }
 
+Write-Verbose ". ./download_image.ps1 -imagesPath $imagesPath";
 . ./download_image.ps1 -imagesPath $imagesPath;
 
 $images = [IO.Directory]::GetFiles($imagesPath, '*.exe');
@@ -60,4 +62,8 @@ $images | ForEach-Object {
     Write-Verbose "$($tools.ifrextract) $irfbinFile $irfFile";
     . $tools.ifrextract $irfbinFile $irfFile;
 
+    echo '  Build grub.cfg'
+    $grubFile = $firmwareImage + '.grub.cfg';
+    Write-Verbose "./build_grubmenu.ps1 -irfFile $irfFile -grubFile $grubFile";
+    . ./build_grubmenu.ps1 -irfFile $irfFile -grubFile $grubFile
 }

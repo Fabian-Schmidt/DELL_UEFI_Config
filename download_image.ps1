@@ -5,7 +5,7 @@ param (
     $imagesPath
 )
 
-$ErrorActionPreference = 'Stop';
+$ErrorActionPreference = [System.Management.Automation.ActionPreference]::Stop;
 
 Write-Host "Fetching UEFI images";
 
